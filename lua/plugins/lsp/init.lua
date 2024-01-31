@@ -83,6 +83,8 @@ return{
         local servers = {
             -- clangd = {},
             -- gopls = {},
+            -- templ = {},
+
             -- pyright = {},
             -- rust_analyzer = {},
             -- tsserver = {},
