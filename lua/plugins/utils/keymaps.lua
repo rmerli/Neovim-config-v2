@@ -1,4 +1,3 @@
-
 -- [[ Basic Keymaps ]]
 
 -- Keymaps for better default experience
@@ -25,17 +24,25 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   group = highlight_group,
   pattern = '*',
 })
+
+
+-- added autoformat for go
+local go_autocommands = vim.api.nvim_create_augroup('GoAutocommands', { clear = true })
+vim.api.nvim_create_autocmd('BufWritePost', {
+  callback = function ()
+    vim.fn.jobstart({'goimports', '-w', '.'}, {
+      on_exit = function ()
+        vim.cmd('checktime')
+      end
+    })
+  end,
+  group = go_autocommands,
+  pattern = '*.go',
+})
+
 vim.keymap.set('n', '<Leader>trn', ":TestNearest<CR>")
 vim.keymap.set('n', '<Leader>trf', ":TestFile<CR>")
-vim.keymap.set('n', '<Leader>tl', function() require('dap').continue() end, {desc = "Debug: Listen/Next Breakpoint"})
-vim.keymap.set('n', '<Leader>to', function() require('dap').step_over() end, {desc = "Debug: Step Over"})
-vim.keymap.set('n', '<Leader>ti', function() require('dap').step_into() end, {desc = "Debug: Step Into"})
-vim.keymap.set('n', '<Leader>te', function() require('dap').step_out() end, {desc = "Debug: Step Out"})
-vim.keymap.set('n', '<Leader>b', function() require('dap').toggle_breakpoint() end, {desc = 'Toggle Breakpoint'})
-vim.keymap.set('n', '<Leader>B', function() require('dap').set_breakpoint() end, {desc = 'Set Breakpoint'})
-vim.keymap.set('n', '<Leader>lp', function() require('dap').set_breakpoint(nil, nil, vim.fn.input('Log point message: ')) end)
-vim.keymap.set('n', '<Leader>dr', function() require('dap').repl.open() end)
-vim.keymap.set('n', '<Leader>dl', function() require('dap').run_last() end)
+
 vim.keymap.set({'n', 'v'}, '<Leader>dh', function()
   require('dap.ui.widgets').hover()
 end)

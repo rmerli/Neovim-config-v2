@@ -20,6 +20,7 @@ require("plugins.utils.keymaps")
 -- [[ Setting options ]]
 -- See `:help vim.o`
 -- NOTE: You can change these options as you wish!
+vim.o.autoread = true
 
 -- Set highlight on search
 vim.o.hlsearch = false
@@ -58,22 +59,4 @@ vim.o.completeopt = 'menuone,noselect'
 -- NOTE: You should make sure your terminal supports this
 vim.o.termguicolors = true
 
--- debug
-local dap = require('dap')
 
-dap.adapters.php = {
-    type = "executable",
-    command = "node",
-    args = { os.getenv("HOME") .. "/Software/vscode-php-debug/out/phpDebug.js" }
-}
-
-dap.configurations.php = {
-    {
-        type = "php",
-        request = "launch",
-        name = "Listen for Xdebug",
-        port = 9003
-    }
-}
-
---end debug

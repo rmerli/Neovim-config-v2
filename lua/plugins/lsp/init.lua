@@ -90,10 +90,16 @@ return{
 
             lua_ls = {
                 Lua = {
-                    workspace = { checkThirdParty = false },
+                    workspace = {
+                        checkThirdParty = false,
+                        library = vim.api.nvim_get_runtime_file("", true)
+                    },
                     telemetry = { enable = false },
                     -- NOTE: toggle below to ignore Lua_LS's noisy `missing-fields` warnings
-                    -- diagnostics = { disable = { 'missing-fields' } },
+                    diagnostics = {
+                        disable = {"missing-fields", "incomplete-signature-doc"},
+                        -- globals = { 'vim', 'require',}
+                    },
                 },
             },
         }
@@ -104,7 +110,6 @@ return{
         mason_lspconfig.setup {
             ensure_installed = vim.tbl_keys(servers),
         }
-
         mason_lspconfig.setup_handlers {
             function(server_name)
                 require('lspconfig')[server_name].setup {
@@ -121,7 +126,6 @@ return{
         -- Automatically install LSPs to stdpath for neovim
         { 'williamboman/mason.nvim', config = true },
         'williamboman/mason-lspconfig.nvim',
-
         -- Useful status updates for LSP
         -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
         { 'j-hui/fidget.nvim', opts = {} },
