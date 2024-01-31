@@ -1,5 +1,10 @@
 -- [[ Basic Keymaps ]]
-
+vim.filetype.add({
+    extension = {
+        templ = "templ",
+    },
+})
+--
 -- Keymaps for better default experience
 -- See `:help vim.keymap.set()`
 vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
@@ -52,4 +57,35 @@ vim.keymap.set('n', '<C-u>', ':make upload<CR>', {desc = 'Upload project'})
 vim.keymap.set('n', ']p', 'o<Esc>p==', {desc = 'Paste on new line after'})
 vim.keymap.set('n', '[p', 'O<Esc>p==', {desc = 'Paste on new line before'})
 
+local fixerGroup = vim.api.nvim_create_augroup("PhpCsFixer", {clear = true})
+vim.api.nvim_create_autocmd("BufWritePost", {
+  group = fixerGroup,
+  pattern = "*/src/*.php",
+  callback = function ()
+    vim.fn.jobstart({'./vendor/bin/php-cs-fixer', 'fix', 'src', '-v'},
+      {
+        env = { PHP_CS_FIXER_IGNORE_ENV = 1},
+        on_exit = function ()
+          key = vim.api.nvim_replace_termcodes(':e!<CR>', true, false, true)
+          vim.api.nvim_feedkeys(key, 'n', false)
+        end
+      })
+  end
+})
+
+vim.api.nvim_create_autocmd("BufWritePost", {
+  group = fixerGroup,
+  pattern = "*/tests/*.php",
+  callback = function ()
+    vim.fn.jobstart({'./vendor/bin/php-cs-fixer', 'fix', 'tests', '-v'},
+      {
+        env = { PHP_CS_FIXER_IGNORE_ENV = 1},
+        on_exit = function ()
+          key = vim.api.nvim_replace_termcodes(':e!<CR>', true, false, true)
+          vim.api.nvim_feedkeys(key, 'n', false)
+        end
+      })
+  end
+})
 -- The line beneath this is called `modeline`. See `:help modeline`
+
