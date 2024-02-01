@@ -66,8 +66,7 @@ vim.api.nvim_create_autocmd("BufWritePost", {
       {
         env = { PHP_CS_FIXER_IGNORE_ENV = 1},
         on_exit = function ()
-          key = vim.api.nvim_replace_termcodes(':e!<CR>', true, false, true)
-          vim.api.nvim_feedkeys(key, 'n', false)
+          vim.cmd('checktime')
         end
       })
   end
@@ -81,8 +80,7 @@ vim.api.nvim_create_autocmd("BufWritePost", {
       {
         env = { PHP_CS_FIXER_IGNORE_ENV = 1},
         on_exit = function ()
-          key = vim.api.nvim_replace_termcodes(':e!<CR>', true, false, true)
-          vim.api.nvim_feedkeys(key, 'n', false)
+          vim.cmd('checktime')
         end
       })
   end
