@@ -45,6 +45,26 @@ vim.api.nvim_create_autocmd('BufWritePost', {
   pattern = '*.go',
 })
 
+local templ_format = function()
+    local bufnr = vim.api.nvim_get_current_buf()
+    local filename = vim.api.nvim_buf_get_name(bufnr)
+    local cmd = "templ fmt " .. vim.fn.shellescape(filename)
+    vim.fn.jobstart(cmd, {
+        on_exit = function()
+            -- Reload the buffer only if it's still the current buffer
+            if vim.api.nvim_get_current_buf() == bufnr then
+                vim.cmd('checktime')
+            end
+        end,
+    })
+end
+
+vim.api.nvim_create_autocmd("BufWritePost",
+  {
+    pattern = "*.templ",
+    callback = templ_format,
+  })
+
 vim.keymap.set('n', '<Leader>trn', ":TestNearest<CR>")
 vim.keymap.set('n', '<Leader>trf', ":TestFile<CR>")
 
@@ -52,7 +72,7 @@ vim.keymap.set({'n', 'v'}, '<Leader>dh', function()
   require('dap.ui.widgets').hover()
 end)
 
-vim.keymap.set('n', '<C-b>', ':make<CR>',{desc = 'Build project'})
+vim.keymap.set('n', '<C-b>', ':make build<CR>',{desc = 'Build project'})
 vim.keymap.set('n', '<C-u>', ':make upload<CR>', {desc = 'Upload project'})
 vim.keymap.set('n', ']p', 'o<Esc>p==', {desc = 'Paste on new line after'})
 vim.keymap.set('n', '[p', 'O<Esc>p==', {desc = 'Paste on new line before'})

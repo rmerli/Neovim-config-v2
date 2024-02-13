@@ -2,6 +2,10 @@ return{
     -- LSP Configuration & Plugins
     'neovim/nvim-lspconfig',
     config = function()
+        -- nvim-cmp supports additional completion capabilities, so broadcast that to servers
+        local capabilities = vim.lsp.protocol.make_client_capabilities()
+        capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
+
         local lspconfig = require'lspconfig'
         lspconfig.ccls.setup {
             init_options = {
@@ -88,8 +92,14 @@ return{
             -- pyright = {},
             -- rust_analyzer = {},
             -- tsserver = {},
-            -- html = { filetypes = { 'html', 'twig', 'hbs'} },
-
+            tailwindcss = {
+            --     cmd = {"/usr/local/bin/tailwindcss-language-server", "--stdio"},
+                filetypes = {'html', 'templ'}
+            },
+            html = {
+                filetypes = { 'html', 'twig', 'templ'},
+            },
+            --
             lua_ls = {
                 Lua = {
                     workspace = {
@@ -119,6 +129,7 @@ return{
                     --[[ on_attach = on_attach, ]]
                     settings = servers[server_name],
                     filetypes = (servers[server_name] or {}).filetypes,
+                    cmd = (servers[server_name] or {}).cmd,
                 }
             end,
         }
