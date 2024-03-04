@@ -53,26 +53,25 @@ return {
                 repl = "r",
                 toggle = "t",
             },
+            expand_lines = false,
             layouts = {
-                -- {
-                --   elements = {
-                --     { id = "repl", size = 0.30 },
-                --     { id = "console", size = 0.70 },
-                --   },
-                --   size = 0.19,
-                --   position = "bottom",
-                -- },
                 {
                     elements = {
-                        { id = "scopes", size = 0.50 },
-                        { id = "breakpoints", size = 0.20 },
-                        { id = "stacks", size = 0.20 },
-                        { id = "watches", size = 0.10 },
-
+                        { id = "repl", size = 0.25 },
+                        { id = "breakpoints", size = 0.25 },
+                        { id = "stacks", size = 0.25 },
+                        { id = "watches", size = 0.25 }
                     },
-                    size = 0.20,
                     position = "left",
+                    size = 40
                 },
+                {
+                    elements = {
+                        { id = "scopes",size = 1 },
+                    },
+                    position = "bottom",
+                    size = 10
+                }
             },
             controls = {
                 enabled = true,
@@ -86,6 +85,10 @@ return {
                     close = { "q", "<Esc>" },
                 },
             },
+            render = {
+                max_type_length = 100,
+                max_value_lines = 50
+            }
         },
         config = function(_, opts)
             -- local icons = require("core.icons").dap
@@ -95,6 +98,60 @@ return {
             --   vim.fn.sign_define("Dap" .. name, { text = sign[1] })
             -- end
             require("dapui").setup(opts)
+            local dap = require("dap")
+            local dapui = require("dapui")
+            dapui.setup(opts)
+            dap.listeners.after.event_initialized["dapui_config"] = function()
+                dapui.open({})
+            end
+            dap.listeners.before.event_terminated["dapui_config"] = function()
+                dapui.close({})
+            end
+            dap.listeners.before.event_exited["dapui_config"] = function()
+                dapui.close({})
+            end
         end,
-    }
+    },
+    {
+        'leoluz/nvim-dap-go',
+        config = function ()
+            require('dap-go').setup {
+                -- Additional dap configurations can be added.
+                -- dap_configurations accepts a list of tables where each entry
+                -- represents a dap configuration. For more details do:
+                -- :help dap-configuration
+                dap_configurations = {
+                    {
+                        -- Must be "go" or it will be ignored by the plugin
+                        type = "go",
+                        name = "Attach remote",
+                        mode = "remote",
+                        request = "attach",
+                    },
+                },
+                -- delve configurations
+                delve = {
+                    -- the path to the executable dlv which will be used for debugging.
+                    -- by default, this is the "dlv" executable on your PATH.
+                    path = "dlv",
+                    -- time to wait for delve to initialize the debug session.
+                    -- default to 20 seconds
+                    initialize_timeout_sec = 20,
+                    -- a string that defines the port to start delve debugger.
+                    -- default to string "${port}" which instructs nvim-dap
+                    -- to start the process in a random available port
+                    port = "${port}",
+                    -- additional args to pass to dlv
+                    args = {},
+                    -- the build flags that are passed to delve.
+                    -- defaults to empty string, but can be used to provide flags
+                    -- such as "-tags=unit" to make sure the test suite is
+                    -- compiled during debugging, for example.
+                    -- passing build flags using args is ineffective, as those are
+                    -- ignored by delve in dap mode.
+                    build_flags = "",
+                },
+            }
+        end
+    },
 }
