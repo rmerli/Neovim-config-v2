@@ -6,6 +6,11 @@ return  {
         -- See `:help telescope` and `:help telescope.setup()`
         require('telescope').setup {
             defaults = {
+                file_ignore_patterns = {
+                    "node_modules/.*",
+                    "package-lock.json",
+                    "lazy-lock.json",
+                },
                 mappings = {
                     i = {
                         ['<C-u>'] = false,
