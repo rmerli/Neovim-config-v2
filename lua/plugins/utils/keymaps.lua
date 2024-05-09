@@ -67,6 +67,7 @@ vim.api.nvim_create_autocmd("BufWritePost",
 
 vim.keymap.set('n', '<Leader>trn', ":TestNearest<CR>")
 vim.keymap.set('n', '<Leader>trf', ":TestFile<CR>")
+vim.keymap.set('n', '<Leader>E', ":Ex<CR>")
 
 vim.keymap.set({'n', 'v'}, '<Leader>dh', function()
   require('dap.ui.widgets').hover()
