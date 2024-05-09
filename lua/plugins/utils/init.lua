@@ -1,5 +1,4 @@
 return {
-    -- detect tabstop and shiftwidth automatically
     {
         -- Autocompletion
         'hrsh7th/nvim-cmp',

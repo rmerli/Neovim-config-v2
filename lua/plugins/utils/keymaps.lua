@@ -77,6 +77,8 @@ vim.keymap.set('n', '<C-u>', ':make upload<CR>', {desc = 'Upload project'})
 vim.keymap.set('n', ']p', 'o<Esc>p==', {desc = 'Paste on new line after'})
 vim.keymap.set('n', '[p', 'O<Esc>p==', {desc = 'Paste on new line before'})
 
+vim.keymap.set('n', '<Leader>ii', 'iif err != nil {<Esc>==oreturn err\n}<Esc>', {})
+
 local fixerGroup = vim.api.nvim_create_augroup("PhpCsFixer", {clear = true})
 vim.api.nvim_create_autocmd("BufWritePost", {
   group = fixerGroup,

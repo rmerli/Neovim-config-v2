@@ -59,4 +59,9 @@ vim.o.completeopt = 'menuone,noselect'
 -- NOTE: You should make sure your terminal supports this
 vim.o.termguicolors = true
 
+vim.g['test#php#phpunit#executable']= '/home/riccardo/Projects/afs/portal-api/vendor/bin/phpunit --disallow-test-output'
 
+vim.opt.tabstop = 4
+vim.opt.shiftwidth = 4
+-- The line beneath this is called `modeline`. See `:help modeline`
+-- vim: ts=4 sts=2 sw=4 et
